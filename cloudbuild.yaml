@@ -1,0 +1,26 @@
+
+substitutions:
+  _REGION: southamerica-east1
+
+steps:
+- name: gcr.io/cloud-builders/docker
+  args: ['build','-t','$_REGION-docker.pkg.dev/$PROJECT_ID/meulembrete/$PROJECT_ID:$_SHORT_SHA','.']
+
+- name: gcr.io/cloud-builders/docker
+  args: ['push','$_REGION-docker.pkg.dev/$PROJECT_ID/meulembrete/$PROJECT_ID:$_SHORT_SHA']
+
+- name: gcr.io/cloud-builders/gcloud
+  args:
+    - run
+    - deploy
+    - meulembrete-api
+    - --image
+    - $_REGION-docker.pkg.dev/$PROJECT_ID/meulembrete/$PROJECT_ID:$_SHORT_SHA
+    - --region
+    - $_REGION
+    - --allow-unauthenticated
+    - --port
+    - '8080'
+
+images:
+- $_REGION-docker.pkg.dev/$PROJECT_ID/meulembrete/$PROJECT_ID:$_SHORT_SHA

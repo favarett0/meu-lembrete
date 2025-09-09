@@ -1,0 +1,10 @@
+# Ignore typical local files when deploying source
+.git/
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+dist/
+build/
+.env
